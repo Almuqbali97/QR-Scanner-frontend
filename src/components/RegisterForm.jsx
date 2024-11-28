@@ -9,6 +9,8 @@ const RegisterForm = () => {
         groupSize: 1,
     });
 
+    const [loading, setLoading] = useState(false); // Loading state
+
     const handleSubmit = async () => {
         const { firstName, lastName, mobileNumber, groupSize } = formData;
 
@@ -17,6 +19,8 @@ const RegisterForm = () => {
             return;
         }
 
+        setLoading(true); // Start loading
+
         try {
             const response = await axios.post(import.meta.env.VITE_API_URL + "/register", {
                 firstName,
@@ -24,11 +28,14 @@ const RegisterForm = () => {
                 mobileNumber,
                 groupSize,
             });
+
             alert('Registration successful!');
             setFormData({ firstName: '', lastName: '', mobileNumber: '', groupSize: 1 });
         } catch (err) {
             alert(err.response?.data?.message || 'Error registering user.');
             console.error(err);
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
@@ -65,10 +72,36 @@ const RegisterForm = () => {
             />
             <button
                 onClick={handleSubmit}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+                className={`px-4 py-2 rounded w-full ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'
+                    } text-white`}
+                disabled={loading} // Disable button while loading
             >
-                Register
+                {loading ? (
+                    <div className="flex items-center justify-center">
+                        <div className="loader mr-2"></div> Submitting...
+                    </div>
+                ) : (
+                    'Register'
+                )}
             </button>
+            <style jsx>{`
+                .loader {
+                    border: 4px solid #f3f3f3;
+                    border-top: 4px solid #3498db;
+                    border-radius: 50%;
+                    width: 20px;
+                    height: 20px;
+                    animation: spin 1s linear infinite;
+                }
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            `}</style>
         </div>
     );
 };

@@ -1,16 +1,104 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ScanQR from './ScanQR';
 import FindByMobile from './FindByMobile';
 import RegisterForm from './RegisterForm';
 
 const AdminPage = () => {
     const [view, setView] = useState(''); // Current view: 'scan', 'find', or 'register'
+    const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication state
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    // Check authentication on component mount
+    useEffect(() => {
+        const storedToken = localStorage.getItem('admin-token');
+        if (storedToken) {
+            const tokenDate = new Date(parseInt(storedToken, 10));
+            const currentDate = new Date();
+            const differenceInDays = (currentDate - tokenDate) / (1000 * 60 * 60 * 24);
+
+            if (differenceInDays <= 15) {
+                setIsAuthenticated(true);
+            } else {
+                localStorage.removeItem('admin-token');
+            }
+        }
+    }, []);
+
+    const handleLogin = () => {
+        if (username === 'admin' && password === 'admin') {
+            setIsAuthenticated(true);
+            setError('');
+            // Store a token with the current timestamp
+            localStorage.setItem('admin-token', Date.now().toString());
+        } else {
+            setError('Invalid username or password.');
+        }
+    };
+
+    const handleLogout = () => {
+        setIsAuthenticated(false);
+        localStorage.removeItem('admin-token');
+    };
+
+    if (!isAuthenticated) {
+        return (
+            <div className="h-screen flex justify-center items-center bg-gray-50">
+                <div className="p-6 max-w-md w-full bg-white shadow-lg rounded-lg">
+                    <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Admin Login</h2>
+                    {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+                    <div className="space-y-4">
+                        <div>
+                            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                                Username
+                            </label>
+                            <input
+                                type="text"
+                                id="username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                placeholder="Enter username"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                placeholder="Enter password"
+                            />
+                        </div>
+                        <button
+                            onClick={handleLogin}
+                            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300"
+                        >
+                            Login
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="h-screen flex justify-center items-center">
-
             <div className="p-8 max-w-3xl transition-all duration-300 mx-auto bg-gradient-to-r from-blue-50 via-white to-green-50 shadow-lg rounded-xl">
-                <h2 className="text-3xl font-extrabold text-center mb-8 text-gray-800">Admin Dashboard</h2>
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-3xl font-extrabold text-gray-800">Admin Dashboard</h2>
+                    <button
+                        onClick={handleLogout}
+                        className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
+                    >
+                        Logout
+                    </button>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <button
                         onClick={() => setView('scan')}
