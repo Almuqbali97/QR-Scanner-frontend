@@ -3,6 +3,25 @@ import React from 'react';
 const RegistrationFormFields = ({ formData, setFormData, handleSubmit }) => {
     const handleChange = (e) => {
         const { name, value, type } = e.target;
+
+        // Normalize Arabic numerals to standard numerals
+        const normalizeNumerals = (str) => {
+            return str.replace(/[٠-٩]/g, (char) => String(char.charCodeAt(0) - 1632));
+        };
+
+        // Validate numeric input for the mobile number field
+        if (name === 'mobileNumber' && value !== '') {
+            const normalizedValue = normalizeNumerals(value);
+            const isNumeric = /^\d*$/.test(normalizedValue); // Allow only digits
+            if (!isNumeric) return; // Ignore non-numeric input
+
+            setFormData((prev) => ({
+                ...prev,
+                [name]: normalizedValue,
+            }));
+            return;
+        }
+
         setFormData((prev) => ({
             ...prev,
             [name]: type === 'number' ? (value === '' ? '' : parseInt(value)) : value,
