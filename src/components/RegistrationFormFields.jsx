@@ -3,6 +3,13 @@ import React from 'react';
 const RegistrationFormFields = ({ formData, setFormData, handleSubmit }) => {
     const handleChange = (e) => {
         const { name, value, type } = e.target;
+
+        // Validate numeric input for the mobile number field
+        if (name === 'mobileNumber' && value !== '') {
+            const isNumeric = /^\d*$/.test(value); // Allow only digits
+            if (!isNumeric) return; // Ignore non-numeric input
+        }
+
         setFormData((prev) => ({
             ...prev,
             [name]: type === 'number' ? (value === '' ? '' : parseInt(value)) : value,
