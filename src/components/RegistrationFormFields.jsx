@@ -26,6 +26,7 @@ const RegistrationFormFields = ({ formData, setFormData, handleSubmit }) => {
             ...prev,
             [name]: type === 'number' ? (value === '' ? '' : parseInt(value)) : value,
         }));
+        window.scrollTo(0, 0)
     };
 
     return (
