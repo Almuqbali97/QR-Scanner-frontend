@@ -66,7 +66,6 @@ const RegistrationForm = () => {
         } finally {
             setIsLoading(false); // Always stop loading after the API call
         }
-        window.scrollTo(0, document.body.scrollHeight);
 
     };
 

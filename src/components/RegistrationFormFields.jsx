@@ -1,32 +1,59 @@
 import React from 'react';
 
 const RegistrationFormFields = ({ formData, setFormData, handleSubmit }) => {
-    const handleChange = (e) => {
-        const { name, value, type } = e.target;
+    const handleSubmit = async () => {
+        setIsLoading(true); // Start loading before validation and API call
 
-        // Normalize Arabic numerals to standard numerals
-        const normalizeNumerals = (str) => {
-            return str.replace(/[٠-٩]/g, (char) => String(char.charCodeAt(0) - 1632));
-        };
+        const { firstName, lastName, mobileNumber, groupSize } = formData;
 
-        // Validate numeric input for the mobile number field
-        if (name === 'mobileNumber' && value !== '') {
-            const normalizedValue = normalizeNumerals(value);
-            const isNumeric = /^\d*$/.test(normalizedValue); // Allow only digits
-            if (!isNumeric) return; // Ignore non-numeric input
-
-            setFormData((prev) => ({
-                ...prev,
-                [name]: normalizedValue,
-            }));
+        // Validation
+        if (!firstName || !lastName || !mobileNumber) {
+            setResponseMessage('All fields are required!');
+            setIsLoading(false); // Stop loading if validation fails
+            return;
+        }
+        if (mobileNumber.length < 8) {
+            setResponseMessage('Mobile number must be at least 8 digits long!');
+            setIsLoading(false); // Stop loading if validation fails
             return;
         }
 
-        setFormData((prev) => ({
-            ...prev,
-            [name]: type === 'number' ? (value === '' ? '' : parseInt(value)) : value,
-        }));
-        window.scrollTo(0, document.body.scrollHeight);
+        try {
+            const payload = {
+                firstName,
+                lastName,
+                mobileNumber,
+                groupSize: formData.isGroup ? groupSize : 1,
+            };
+
+            const response = await axios.post(import.meta.env.VITE_API_URL + "/register", payload);
+
+            setQrCodeData({
+                qrValue: response.data.mobileNumber,
+                name: `${firstName} ${lastName}`,
+                status: 'Registered',
+            });
+
+            // Scroll to the bottom of the page after setting the QR code data
+            window.scrollTo(0, document.body.scrollHeight);
+
+            // Reset form data and message
+            setFormData({
+                firstName: '',
+                lastName: '',
+                mobileNumber: '',
+                groupSize: 1,
+                isGroup: false,
+            });
+            setResponseMessage('');
+        } catch (error) {
+            console.error(error);
+            setResponseMessage(
+                error.response?.data?.message || 'An error occurred during registration.'
+            );
+        } finally {
+            setIsLoading(false); // Always stop loading after the API call
+        }
     };
 
     return (
