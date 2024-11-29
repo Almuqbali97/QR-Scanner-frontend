@@ -27,7 +27,7 @@ const AdminPage = () => {
     }, []);
 
     const handleLogin = () => {
-        if (username === 'admin' && password === 'admin') {
+        if (username === 'Xevents' && password === 'Imad') {
             setIsAuthenticated(true);
             setError('');
             // Store a token with the current timestamp
