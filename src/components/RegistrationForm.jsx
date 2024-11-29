@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import RegistrationFormFields from './RegistrationFormFields';
 import RegistrationSuccessCard from './RegistrationSuccessCard';
 import axios from 'axios';
-
+import logo from '../assets/logo.png'
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
         firstName: '',
@@ -61,30 +61,33 @@ const RegistrationForm = () => {
 
     return (
         <div className="h-screen flex justify-center items-center">
-            <div className="p-6 max-w-lg min-w-[350px] mx-auto bg-gradient-to-r from-blue-50 to-green-50 shadow-xl rounded-lg">
-                <h2 className="text-3xl font-extrabold text-center mb-6 text-gray-800">
-                    New Registration
-                </h2>
-                {!qrCodeData ? (
-                    <RegistrationFormFields
-                        formData={formData}
-                        setFormData={setFormData}
-                        handleSubmit={handleSubmit}
-                    />
-                ) : (
-                    <RegistrationSuccessCard
-                        qrCodeData={qrCodeData}
-                        onDownload={() => {
-                            // Define download logic here if needed
-                        }}
-                        onGoBack={() => setQrCodeData(null)}
-                    />
-                )}
-                {responseMessage && (
-                    <p className="mt-4 text-center text-sm font-semibold text-red-600">
-                        {responseMessage}
-                    </p>
-                )}
+            <div>
+                <img src={logo} className='mt-20' />
+                <div className="p-6 max-w-lg min-w-[350px] mx-auto bg-gradient-to-r from-blue-50 to-green-50 shadow-xl rounded-lg">
+                    <h2 className="text-3xl font-extrabold text-center mb-6 text-gray-800">
+                        New Registration
+                    </h2>
+                    {!qrCodeData ? (
+                        <RegistrationFormFields
+                            formData={formData}
+                            setFormData={setFormData}
+                            handleSubmit={handleSubmit}
+                        />
+                    ) : (
+                        <RegistrationSuccessCard
+                            qrCodeData={qrCodeData}
+                            onDownload={() => {
+                                // Define download logic here if needed
+                            }}
+                            onGoBack={() => setQrCodeData(null)}
+                        />
+                    )}
+                    {responseMessage && (
+                        <p className="mt-4 text-center text-sm font-semibold text-red-600">
+                            {responseMessage}
+                        </p>
+                    )}
+                </div>
             </div>
         </div>
     );

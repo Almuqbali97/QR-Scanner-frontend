@@ -46,7 +46,7 @@ const AdminPage = () => {
         return (
             <div className="h-screen flex justify-center items-center bg-gray-50">
                 <div className="p-6 max-w-md w-full bg-white shadow-lg rounded-lg">
-                    <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Admin Login</h2>
+                    <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">قبة الفن والإبداع</h2>
                     {error && <p className="text-red-500 text-center mb-4">{error}</p>}
                     <div className="space-y-4">
                         <div>
@@ -91,13 +91,13 @@ const AdminPage = () => {
         <div className="h-screen flex justify-center items-center">
             <div className="p-8 max-w-3xl transition-all duration-300 mx-auto bg-gradient-to-r from-blue-50 via-white to-green-50 shadow-lg rounded-xl">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-3xl font-extrabold text-gray-800">Admin Dashboard</h2>
                     <button
                         onClick={handleLogout}
                         className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
                     >
                         Logout
                     </button>
+                    <h2 className="text-3xl font-extrabold text-gray-800">قبة الفن والإبداع</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <button
