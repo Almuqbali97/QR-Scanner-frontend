@@ -74,7 +74,7 @@ const RegistrationForm = () => {
             <div>
                 <div>
 
-                    <div className='flex w-full mt-0 sm:mt-20 justify-start items-center'>
+                    <div className='flex w-full mt-5 sm:mt-16 justify-start items-center'>
                         <img src={logo} className=' w-56 sm:w-80 mx-auto' />
                     </div>
                 </div>
