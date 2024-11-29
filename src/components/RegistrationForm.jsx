@@ -73,7 +73,7 @@ const RegistrationForm = () => {
         <div className="h-screen flex justify-center items-center">
             <div>
                 <div>
-                    <div className='flex w-full mt-5 md:mt-16 justify-start items-center'>
+                    <div className='flex w-full mt-0 md:mt-16 justify-start items-center'>
                         <img src={logo} className=' h-56 sm:h-72 mx-auto' />
                     </div>
                 </div>
