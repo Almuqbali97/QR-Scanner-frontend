@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import RegistrationFormFields from './RegistrationFormFields';
 import RegistrationSuccessCard from './RegistrationSuccessCard';
 import axios from 'axios';
-import logo from '../assets/logo.png'
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
         firstName: '',
@@ -66,18 +65,13 @@ const RegistrationForm = () => {
         } finally {
             setIsLoading(false); // Always stop loading after the API call
         }
-
     };
 
 
     return (
         <div className="h-screen flex justify-center items-center">
             <div>
-                <div>
-                    <div className='flex w-full mt-0 md:mt-16 justify-start items-center'>
-                        <img src={logo} className=' h-56 sm:h-72 mx-auto' />
-                    </div>
-                </div>
+              
                 {isLoading ?
 
                     <div role="status" className=' h-full w-full flex justify-center items-center mt-5'>
@@ -89,9 +83,9 @@ const RegistrationForm = () => {
                     </div>
                     :
                     <div className="p-6 max-w-lg min-w-[350px] mx-auto bg-gradient-to-r from-blue-50 to-green-50 shadow-xl rounded-lg">
-                        <h2 className="text-3xl font-extrabold text-center mb-6 text-gray-800">
+                        {/* <h2 className="text-3xl font-extrabold text-center mb-6 text-gray-800">
                             New Registration
-                        </h2>
+                        </h2> */}
                         {!qrCodeData ? (
                             <RegistrationFormFields
                                 formData={formData}
