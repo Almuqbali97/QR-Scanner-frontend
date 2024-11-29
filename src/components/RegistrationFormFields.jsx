@@ -1,83 +1,101 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const RegistrationFormFields = ({ formData, setFormData, handleSubmit }) => {
+    const handleChange = (e) => {
+        const { name, value, type } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: type === 'number' ? (value === '' ? '' : parseInt(value)) : value,
+        }));
+    };
+
     return (
-        <div>
-            <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                <input
-                    type="text"
-                    placeholder="Enter your first name"
-                    value={formData.firstName}
-                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    className="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300"
-                />
-            </div>
-
-            <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                <input
-                    type="text"
-                    placeholder="Enter your last name"
-                    value={formData.lastName}
-                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                    className="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300"
-                />
-            </div>
-
-            <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-                <input
-                    type="number"
-                    placeholder="Enter your mobile number"
-                    value={formData.mobileNumber}
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            mobileNumber: e.target.value.replace(/\D/, ''), // Allow only numbers
-                        })
-                    }
-                    className="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300"
-                />
-            </div>
-
-            <div className="mb-4">
-                <label className="flex items-center space-x-2">
-                    <input
-                        type="checkbox"
-                        checked={formData.isGroup}
-                        onChange={(e) => setFormData({ ...formData, isGroup: e.target.checked, groupSize: 1 })}
-                        className="focus:ring focus:ring-blue-300"
-                    />
-                    <span>Register as a group</span>
+        <form
+            onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+            }}
+            className="space-y-4"
+        >
+            <div>
+                <label className="block text-gray-700 font-semibold mb-1">
+                    First Name
                 </label>
-                {formData.isGroup && (
-                    <div className="mt-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Group Size</label>
-                        <input
-                            type="number"
-                            placeholder="Enter group size"
-                            value={formData.groupSize}
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    groupSize: parseInt(e.target.value, 10) || 1,
-                                })
-                            }
-                            className="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300"
-                            min="1"
-                        />
-                    </div>
-                )}
+                <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200"
+                />
             </div>
+
+            <div>
+                <label className="block text-gray-700 font-semibold mb-1">
+                    Last Name
+                </label>
+                <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200"
+                />
+            </div>
+
+            <div>
+                <label className="block text-gray-700 font-semibold mb-1">
+                    Mobile Number
+                </label>
+                <input
+                    type="text"
+                    name="mobileNumber"
+                    value={formData.mobileNumber}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200"
+                />
+            </div>
+
+            <div className="flex items-center">
+                <input
+                    type="checkbox"
+                    name="isGroup"
+                    checked={formData.isGroup}
+                    onChange={(e) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            isGroup: e.target.checked,
+                            groupSize: e.target.checked ? prev.groupSize : 1,
+                        }))
+                    }
+                    className="mr-2"
+                />
+                <label className="text-gray-700 font-semibold">Group Registration</label>
+            </div>
+
+            {formData.isGroup && (
+                <div>
+                    <label className="block text-gray-700 font-semibold mb-1">
+                        Group Size
+                    </label>
+                    <input
+                        type="number"
+                        name="groupSize"
+                        value={formData.groupSize}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200 appearance-none"
+                        min="1"
+                    />
+                </div>
+            )}
 
             <button
-                onClick={handleSubmit}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-lg w-full hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
+                type="submit"
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-600"
             >
-                Submit Registration
+                Register
             </button>
-        </div>
+        </form>
     );
 };
 
