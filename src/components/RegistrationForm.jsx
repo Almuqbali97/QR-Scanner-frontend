@@ -11,6 +11,7 @@ const RegistrationForm = () => {
         groupSize: 1,
         isGroup: false,
     });
+
     const [qrCodeData, setQrCodeData] = useState(null); // Success data for QR
     const [responseMessage, setResponseMessage] = useState(''); // To store the response message
 
@@ -62,7 +63,9 @@ const RegistrationForm = () => {
     return (
         <div className="h-screen flex justify-center items-center">
             <div>
-                <img src={logo} className='mt-20' />
+                <div className='flex w-full  mt-9 sm:mt-20 justify-start items-center'>
+                    <img src={logo} className=' w-56 sm:w-80 mx-auto' />
+                </div>
                 <div className="p-6 max-w-lg min-w-[350px] mx-auto bg-gradient-to-r from-blue-50 to-green-50 shadow-xl rounded-lg">
                     <h2 className="text-3xl font-extrabold text-center mb-6 text-gray-800">
                         New Registration
