@@ -27,7 +27,7 @@ const ReportFetcher = () => {
             };
 
             // Send the request
-            const res = await fetch("http://localhost:5000/get-report", {
+            const res = await fetch(import.meta.env.VITE_API_URL + "/get-report", {
                 method: "POST", // Use POST since we're sending JSON
                 headers: {
                     "Content-Type": "application/json",
