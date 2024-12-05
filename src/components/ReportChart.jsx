@@ -1,16 +1,60 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from "chart.js";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Tooltip,
+    Legend,
+} from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 const ReportChart = ({ data }) => {
-    const labels = data.map((entry) =>
-        new Date(entry.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    );
+    // Define time intervals (e.g., 4:30, 5:30, ..., 11:30)
+    const startHour = 16; // 4:30 PM in 24-hour format
+    const timeIntervals = Array.from({ length: 8 }, (_, i) => {
+        const date = new Date();
+        date.setHours(startHour + i, 30, 0, 0); // Set hour and 30 minutes
+        return date;
+    });
 
-    const registrations = data.map((entry) => entry.groupSize);
-    const visitors = data.map((entry) => (entry.status !== "registeredOnly" ? entry.groupSize : 0));
+    // Group data by these intervals
+    const groupedData = timeIntervals.map((interval, index) => {
+        const nextInterval = new Date(interval);
+        nextInterval.setHours(interval.getHours() + 1);
+
+        const registrations = data.reduce((sum, entry) => {
+            const entryTime = new Date(entry.timestamp);
+            if (entryTime >= interval && entryTime < nextInterval) {
+                return sum + entry.groupSize;
+            }
+            return sum;
+        }, 0);
+
+        const visitors = data.reduce((sum, entry) => {
+            const entryTime = new Date(entry.timestamp);
+            if (
+                entry.status !== "registeredOnly" &&
+                entryTime >= interval &&
+                entryTime < nextInterval
+            ) {
+                return sum + entry.groupSize;
+            }
+            return sum;
+        }, 0);
+
+        return { interval, registrations, visitors };
+    });
+
+    // Prepare labels and datasets
+    const labels = groupedData.map((entry) =>
+        entry.interval.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    );
+    const registrations = groupedData.map((entry) => entry.registrations);
+    const visitors = groupedData.map((entry) => entry.visitors);
 
     const chartData = {
         labels,
