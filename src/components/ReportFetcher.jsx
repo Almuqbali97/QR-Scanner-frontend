@@ -293,7 +293,15 @@ const ReportFetcher = () => {
                         </div>
                     </div>
                 )}
-
+                {/* Line Graph */}
+                {report && (
+                    <div className="mt-6">
+                        <h2 className="text-xl font-bold text-gray-800 mb-4">
+                            Registrations and Visitors Over Time
+                        </h2>
+                        <ReportChart data={report.processedData} />
+                    </div>
+                )}
                 {/* Report Table */}
                 <div className="mt-6">
                     {report?.processedData && (
@@ -363,15 +371,7 @@ const ReportFetcher = () => {
                     )}
                 </div>
 
-                {/* Line Graph */}
-                {report && (
-                    <div className="mt-6">
-                        <h2 className="text-xl font-bold text-gray-800 mb-4">
-                            Registrations and Visitors Over Time
-                        </h2>
-                        <ReportChart data={report.processedData} />
-                    </div>
-                )}
+
             </div>
         </div>
     );
